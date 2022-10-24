@@ -1,0 +1,23 @@
+.sure {
+  border-bottom: 2px solid black;
+  margin: 2px;
+  display: grid;
+  place-items: center;
+}
+
+.sure:hover {
+  background-color: rgba(65, 105, 225, 0.692);
+  transition: all 500ms ease-in-out
+}
+
+.search-area {
+  display: grid;
+  place-items: center;
+  margin: 5px;
+}
+
+.search-box {
+  min-width: 300px;
+  padding: .5em;
+  border-radius: 5px;
+}

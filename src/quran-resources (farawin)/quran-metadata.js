@@ -125,7 +125,7 @@ export const suras = [
 	[6221, 4, 22, 1, 'الإخلاص', "Al-Ikhlaas", 'Sincerity', 'Meccan'],
 	[6225, 5, 20, 1, 'الفلق', "Al-Falaq", 'The Dawn', 'Meccan'],
 	[6230, 6, 21, 1, 'الناس', "An-Naas", 'Mankind', 'Meccan'],
-	[6236, 1]
+	// [6236, 1]
 ];
 
 
