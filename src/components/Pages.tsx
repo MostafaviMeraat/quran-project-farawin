@@ -1,104 +1,119 @@
-import { suras, pages } from '../quran-resources (farawin)/quran-metadata'
-import { emla } from '../quran-resources (farawin)/quran-text-emla'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from "react-router-dom"
+import { useEffect, useState, useCallback } from 'react'
+import { pages, suras } from '../quran-resources (farawin)/quran-metadata'
+import { emla } from "../quran-resources (farawin)/quran-text-emla"
+import { Aye, ArrAye, AnyArr } from "../types"
+import SuraHead from "./SuraHead"
+import { ansarian } from "../quran-resources (farawin)/quran-translate.fa.ansarian"
 
 const Pages = () => {
-  //ts
-  interface arr {
-    data: string[]
-    aya: number[]
+
+  let { pageNumber } = useParams()
+  let pageNum: number = Number(pageNumber)
+  const navigate = useNavigate()
+  const [arr, setArr] = useState<AnyArr>([])
+
+
+  useEffect(() => {
+    pageContent(pageNum)
+  }, [pageNum])
+
+
+  const next = () => {
+    navigate(`/page/${pageNum + 1}`)
   }
-  type anyArr = any[]
+  const previous = () => {
+    navigate(`/page/${pageNum - 1}`)
+  }
+  const backToMenu = () => {
+    navigate('/')
+  }
+  const pageContent = (pageNum: number) => {
 
-  // variables
-  let tempArr: any[] = []
-  const [newSuras, setNewSuras] = useState<anyArr>([{
-    data: [],
-    aye: []
-  }])
-  const { id } = useParams()
-  const [page, setPage] = useState(1)
-  const [content, setContent] = useState<anyArr>([])
-  let startSure: number = 0
-  let endSure: number = 0
-  let startAye: number = 0
-  let endAye: number = 0
-  let start: number = 0
-  let end: number = 0
-  // useEffects 
-  useEffect(() => {
-    allSuras(suras)
-  }, [])
-  useEffect(() => {
-    findPage(id)
-  }, [id])
-  useEffect(() => {
-    pageContent(page)
-  }, [page])
+    let currSura: number = 0
+    let arrtemp: ArrAye = [{
+      aye: [],
+      translate: [],
+      ayeNumber: [],
+      sure: '',
+      type: ''
+    }]
+    let start = Number(suras[pages[pageNum][0] - 1][0]) + pages[pageNum][1] - 1
 
-  // functions
-  const allSuras = (suras: any[]) => {
-    for (let c = 0; c < suras.length - 1; c++) {
-      if (c === 0 || c === 8) {
-        let arr: arr = { data: [], aya: [] }
-        let cnt = 0
-        for (let c1 = suras[c][0]; c1 < suras[c][0] + suras[c][1]; c1++) {
-          arr.data.push(emla[c1])
-          arr.aya.push(cnt++)
+    if (pageNum !== 604) {
+      let end = Number(suras[pages[pageNum + 1][0] - 1][0]) + pages[pageNum + 1][1] - 1
+      for (let c = start; c < end - start + start; c++) {
+        currSura = Number(findSuraByIndex(emla.indexOf(emla[c]) + 1))
+        try {
+          arrtemp[0].aye.push(emla[c])
+          arrtemp[0].translate.push(ansarian[c])
+          arrtemp[0].sure = String(suras[currSura - 1][4])
+          arrtemp[0].ayeNumber.push(emla.indexOf(emla[c]) - Number(suras[currSura - 1][0]) + 1)
+          arrtemp[0].type = String(suras[currSura - 1][7])
+        } catch (error) {
+          console.log('error');
         }
-        tempArr.push(arr)
       }
-      else {
-        let arr: arr = { data: [], aya: [] }
-        arr.data.push("بِسۡمِ اللّٰهِ الرَّحۡمٰنِ الرَّحٖیمِ")
-        let cnt = 0
-        for (let c1 = suras[c][0]; c1 < suras[c][0] + suras[c][1]; c1++) {
-          arr.data.push(emla[c1])
-          arr.aya.push(cnt++)
+      setArr(arrtemp)
+    }
+    else {
+      let end = Number(suras[pages[pageNum + 1][0] - 1][0]) + pages[pageNum + 1][1] - 1
+      for (let c = start; c < end - start + start; c++) {
+        currSura = Number(findSuraByIndex(emla.indexOf(emla[c]) + 1))
+        try {
+          arrtemp[0].aye.push(emla[c])
+          arrtemp[0].translate.push(ansarian[c])
+          arrtemp[0].sure = String(suras[currSura - 1][4])
+          arrtemp[0].ayeNumber.push(emla.indexOf(emla[c]) - Number(suras[currSura - 1][0]) + 1)
+          arrtemp[0].type = String(suras[currSura - 1][7])
+        } catch (error) {
+          console.log('error');
         }
-        tempArr.push(arr)
+      }
+      setArr(arrtemp)
+    }
+
+  }
+  const findSuraByIndex = (index: number) => {
+    for (let c = 0; c < suras.length; c++) {
+      if (index <= suras[c][0]) {
+        return c
       }
     }
-    setNewSuras(tempArr)
-  }
-  const findPage = (id: string | undefined) => {
-    if (typeof id === 'string') {
-      for (let c = 1; c < pages.length; c++) {
-        if (parseInt(id) === pages[c][0] && pages[c][1] === 1) {
-          setPage(c)
-          break
-        }
-        else if ((parseInt(id) === pages[c][0])) {
-          setPage(c - 1) // c-1 for pages like 106 or 255
-          break;
-        }
-        else {
-          for (let c1 = 1; c1 < 6; c1++) {
-            if (parseInt(id) - c1 === pages[c][0]) {
-              setPage(c)
-              break
-            }
-          }
-        }
-      }
-    }
-  }
-  const pageContent = (page: number) => {
-    let arr: any[] = []
-
-    startSure = pages[page][0] - 1
-    startAye = pages[page][1] - 1
-    console.log(startSure, startAye);
-
-
-
-
-    // setContent(arr)
   }
   return (
     <div>
-      {content}
+      <div>
+        {arr.length !== null && arr.map((item: Aye, index: number) => {
+          return (
+            <div key={index}>
+              {item.aye.map((i: string, idx: number) => {
+                return (<div key={idx}>
+                  {item.ayeNumber[idx] === 1
+                    ?
+                    <div>
+                      <SuraHead type={item.type} sure={item.sure} />
+                      <div className="aye">{i} {item.ayeNumber[idx]}</div><br />
+                      <div className="translate">{item.translate[idx]}</div><br /><br /><br />
+                    </div>
+                    :
+                    <div>
+                      <div className="aye">{i} {item.ayeNumber[idx]}</div><br />
+                      <div className="translate">{item.translate[idx]}</div><br /><br /><br />
+                    </div>
+                  }
+                </div>)
+              })}
+            </div>
+          )
+        })}
+      </div>
+      <div>
+        {pageNum !== 604 && <button onClick={next}>Next</button>}
+        {pageNum !== 1 && < button onClick={previous}>Pre</button>}
+        <button onClick={backToMenu}>Back To Menu</button>
+      </div>
+
     </div>
   )
 }

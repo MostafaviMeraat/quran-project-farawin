@@ -21,3 +21,19 @@
   padding: .5em;
   border-radius: 5px;
 }
+
+.sura-head {
+  display: grid;
+  place-items: center;
+
+}
+
+.translate {
+  font-size: 19px;
+  margin: 12px;
+}
+
+.aye {
+  font-size: 24px;
+  margin: 12px;
+}
