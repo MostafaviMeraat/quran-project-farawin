@@ -28,14 +28,15 @@ export type MyObject = {
 export type Actions = {
   CHANGETRANSLATE: string
   CHANGEGHARI: string
+  CHANGEFONTSTYLE: string
+  CHANGEFONTSIZEARABI: string
+  CHANGEFONTSIZEFARSI: string
 }
 
 export type Action = {
   type: string
   payload: any
 }
-
-export type StateTranslate = string
 
 export type Last = {
   sure: string

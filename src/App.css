@@ -6,7 +6,7 @@
 
 @font-face {
   font-family: "font2";
-  src: url("./quran-resources (farawin)/font/me-quran.eot") format('eot');
+  src: url("./quran-resources (farawin)/font/badr.woff") format('woff');
 }
 
 .App {
@@ -50,20 +50,41 @@
 }
 
 .translate {
-  font-size: 20px;
   margin: 12px;
-  font-family: sans-serif
+}
+
+.translate-font1 {
+  font-family: sans-serif;
+}
+
+.translate-font2 {
+  font-family: Arial;
 }
 
 .aye {
-  font-size: 28px;
   margin: 12px;
   margin-left: 75px;
+}
+
+.aye-fs-28 {
+  font-size: 28px;
+}
+
+.aye-fs-22 {
+  font-size: 22px;
+}
+
+.aye-font1 {
   font-family: 'font1';
 }
 
+.aye-font2 {
+  font-family: 'font2';
+}
+
+
 .besmellah {
-  font-size: 32px;
+  font-size: 36px;
   font-family: 'font1';
 }
 
@@ -174,8 +195,9 @@
 }
 
 .title {
+  font-family: sans-serif;
   font-size: 22px;
-  font-style: italic;
+  font-weight: bolder;
 }
 
 .setting-title {

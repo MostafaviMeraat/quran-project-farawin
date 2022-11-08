@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { handleTranslate, handleGhari } from '../redux/actions/action'
+import { handleTranslate, handleGhari, handleFontStyle, handleFontSizeArabi, handleFontSizeFarsi } from '../redux/actions/action'
 import { AllReducers } from '../redux/reducers/index'
 
 const Setting = () => {
@@ -11,6 +11,13 @@ const Setting = () => {
   localStorage.setItem('translate', currentTranslate)
   const currentGhari = useSelector((state: AllReducers) => state.ghari)
   localStorage.setItem('ghari', currentGhari)
+  const currentFontStyle = useSelector((state: AllReducers) => state.fontStyle)
+  localStorage.setItem('fontStyle', currentFontStyle)
+  const currentFontSizeArabi = useSelector((state: AllReducers) => state.fsArabi)
+  localStorage.setItem('fsArabi', currentFontSizeArabi)
+  const currentFontSizeFarsi = useSelector((state: AllReducers) => state.fsFarsi)
+  localStorage.setItem('fsFarsi', currentFontSizeFarsi)
+
 
 
   const handleChangeTranslate = (e: any) => {
@@ -29,11 +36,29 @@ const Setting = () => {
       dispath(handleGhari('AbdulSamad_64kbps_QuranExplorer.Com'))
     }
   }
-  const handleChangeFontStyle = () => {
-
+  const handleChangeFontStyle = (e: any) => {
+    if (e.target.id === 'f1') {
+      dispath(handleFontStyle('f1'))
+    }
+    else if (e.target.id === 'f2') {
+      dispath(handleFontStyle('f2'))
+    }
   }
-  const handleChangeFontSize = () => {
-
+  const handleChangeFontSizeArabi = (e: any) => {
+    if (e.target.id === 'fsa1') {
+      dispath(handleFontSizeArabi('28'))
+    }
+    else if (e.target.id === 'fsa2') {
+      dispath(handleFontSizeArabi('22'))
+    }
+  }
+  const handleChangeFontSizeFarsi = (e: any) => {
+    if (e.target.id === 'fsf1') {
+      dispath(handleFontSizeFarsi('18'))
+    }
+    else if (e.target.id === 'fsf2') {
+      dispath(handleFontSizeFarsi('22'))
+    }
   }
   const handleSubmit = () => {
     navigate(-1)
@@ -91,43 +116,67 @@ const Setting = () => {
 
       <div className="font-family-setion"><span className='title'>فونت:  </span>
         <div className="font-1">
-          <label htmlFor="f1">font 1</label>
+          <label htmlFor="f1">بدر</label>
           <input
             id='f1'
             type='radio'
             name='font'
-            defaultChecked
+            defaultChecked={localStorage.getItem('fontStyle') === 'f1'}
             onChange={handleChangeFontStyle} />
         </div>
         <div className="font-2">
-          <label htmlFor="f2">font 2</label>
+          <label htmlFor="f2">اون یکی</label>
           <input
             id='f2'
             type='radio'
             name='font'
+            defaultChecked={localStorage.getItem('fontStyle') === 'f2'}
             onChange={handleChangeFontStyle} />
         </div>
       </div>
 
-      <div className="font-size-section"><span className='title'>اندازه فونت: </span>
-        <div className="font-size-1">
-          <label htmlFor="fs1">18px</label>
+      <div className="font-size-arabi-section"><span className='title'>اندازه فونت عربی:  </span>
+        <div className="font-size-arabi-1">
+          <label htmlFor="fsa1">28px</label>
           <input
-            id='fs1'
+            id='fsa1'
             type='radio'
-            name='font-size'
-            defaultChecked
-            onChange={handleChangeFontSize} />
+            name='font-size-arabi'
+            defaultChecked={localStorage.getItem("fsArabi") === '28'}
+            onChange={handleChangeFontSizeArabi} />
         </div>
-        <div className="font-size-2">
-          <label htmlFor="fs2">22px</label>
+        <div className="font-size-arabi-2">
+          <label htmlFor="fsa2">22px</label>
           <input
-            id='fs2'
+            id='fsa2'
             type='radio'
-            name='font-size'
-            onChange={handleChangeFontSize} />
+            name='font-size-arabi'
+            defaultChecked={localStorage.getItem("fsArabi") === '22'}
+            onChange={handleChangeFontSizeArabi} />
         </div>
       </div>
+
+      <div className="font-size-farsi-section"><span className='title'>اندازه فونت فارسی:  </span>
+        <div className="font-size-farsi-1">
+          <label htmlFor="fsf1">18px</label>
+          <input
+            id='fsf1'
+            type='radio'
+            name='font-size-farsi'
+            defaultChecked={localStorage.getItem('fsFarsi') === '18'}
+            onChange={handleChangeFontSizeFarsi} />
+        </div>
+        <div className="font-size-farsi-2">
+          <label htmlFor="fsf2">22px</label>
+          <input
+            id='fsf2'
+            type='radio'
+            name='font-size-farsi'
+            defaultChecked={localStorage.getItem('fsFarsi') === '22'}
+            onChange={handleChangeFontSizeFarsi} />
+        </div>
+      </div>
+
       <div className="apply">
         <button className='setting-btn' onClick={handleSubmit}>ثبت</button>
       </div>

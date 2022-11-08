@@ -24,6 +24,17 @@ const Pages = () => {
   const [ayeTemp1, setAyeTemp] = useState<number>(0)
   const currentTranslate = localStorage.getItem('translate')
   const currentGhari = localStorage.getItem('ghari')
+  const currentFontStyle = localStorage.getItem('fontStyle')
+  const currentFontSizeArabi = localStorage.getItem('fsArabi')
+  const currentFontSizeFarsi = localStorage.getItem('fsFarsi')
+
+  const style = {
+    fontSize: `${currentFontSizeArabi}` + 'px',
+  }
+  const style2 = {
+    fontSize: `${currentFontSizeFarsi}` + 'px',
+  }
+
 
   // const [currPlay, setCurrPlay] = useState<boolean>(false)
 
@@ -166,7 +177,6 @@ const Pages = () => {
       console.log(error);
     }
   }
-  console.log(currentGhari);
   return (
     <div className="page-content-wrapper">
       <audio onEnded={handleNext} className="audio" controls autoPlay={toggle} muted={!toggle} src={`http://www.everyayah.com/data/${currentGhari}/${sure}${aye}.mp3`}>
@@ -184,29 +194,56 @@ const Pages = () => {
                     ?
                     <div className="wrapper">
                       <SuraHead type={item.type} sure={item.sure} />
-                      <div onClick={() => { handleSut(item, item.ayeNumber[idx]) }} className="aye">{i} <span className="aye-logo">﴿{item.ayeNumber[idx]}﴾</span></div><br />
+                      <div onClick={() => { handleSut(item, item.ayeNumber[idx]) }}
+                        style={style}
+
+                        className={currentFontStyle === 'f1' ? 'aye aye-font1' : 'aye aye-font2'}>{i}
+                        <span className="aye-logo">﴿{item.ayeNumber[idx]}﴾</span>
+                      </div><br />
                       {currentTranslate === 'makarem'
                         ?
                         <div>
-                          <div className="translate">{item.translateMakarem[idx]}</div><br /><br /><br />
+                          <div
+                            style={style2}
+                            className={currentFontStyle === 'f1' ? 'translate translate-font1' : 'translate translate-font2'}
+                          >{item.translateMakarem[idx]}</div><br /><br /><br />
                         </div>
                         :
                         <div>
-                          <div className="translate">{item.translateAnsarian[idx]}</div><br /><br /><br />
+                          <div
+                            style={style2}
+                            className={currentFontStyle === 'f1' ? 'translate translate-font1' : 'translate translate-font2'}
+                          >{item.translateAnsarian[idx]}</div><br /><br /><br />
                         </div>
                       }
                     </div>
+                    // ===============
                     :
                     <div className="wrapper">
-                      <div onClick={() => { handleSut(item, item.ayeNumber[idx]) }} className='aye'>{i} <span className="aye-logo">﴿{item.ayeNumber[idx]}﴾</span></div><br />
+                      <div onClick={() => { handleSut(item, item.ayeNumber[idx]) }}
+                        style={style}
+                        className={currentFontStyle === 'f1' ? 'aye aye-font1' : 'aye aye-font2'}>{i}
+                        <span className="aye-logo">
+                          ﴿{item.ayeNumber[idx]}﴾
+                        </span>
+                      </div><br />
                       {currentTranslate === 'makarem'
                         ?
                         <div>
-                          <div className="translate">{item.translateMakarem[idx]}</div><br /><br /><br />
+                          <div
+                            style={style2}
+                            className={currentFontStyle === 'f1' ? 'translate translate-font1' : 'translate translate-font2'}>
+                            {item.translateMakarem[idx]}
+                          </div>
+                          <br /><br /><br />
                         </div>
                         :
                         <div>
-                          <div className="translate">{item.translateAnsarian[idx]}</div><br /><br /><br />
+                          <div
+                            style={style2}
+                            className={currentFontStyle === 'f1' ? 'translate translate-font1' : 'translate translate-font2'}>
+                            {item.translateAnsarian[idx]}
+                          </div><br /><br /><br />
                         </div>
                       }
                     </div>

@@ -3,6 +3,9 @@ import { Actions } from '../../types'
 export const ACTIONS: Actions = {
   CHANGETRANSLATE: 'changeTranslate',
   CHANGEGHARI: 'changeGhari',
+  CHANGEFONTSTYLE: 'changeFontStyle',
+  CHANGEFONTSIZEARABI: 'changeFontSizeArabi',
+  CHANGEFONTSIZEFARSI: 'changeFontSizeFarsi',
 }
 
 export const handleTranslate = (name: string) => {
@@ -18,3 +21,25 @@ export const handleGhari = (name: string) => {
     payload: name
   }
 }
+
+export const handleFontStyle = (name: string) => {
+  return {
+    type: ACTIONS.CHANGEFONTSTYLE,
+    payload: name
+  }
+}
+
+export const handleFontSizeArabi = (name: string) => {
+  return {
+    type: ACTIONS.CHANGEFONTSIZEARABI,
+    payload: name
+  }
+}
+
+export const handleFontSizeFarsi = (name: string) => {
+  return {
+    type: ACTIONS.CHANGEFONTSIZEFARSI,
+    payload: name
+  }
+}
+
