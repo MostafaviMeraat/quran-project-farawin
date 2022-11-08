@@ -7,11 +7,11 @@ import SuraHead from "./SuraHead"
 import { ansarian } from "../quran-resources (farawin)/quran-translate.fa.ansarian"
 import { makarem } from '../quran-resources (farawin)/quran-translate.fa.makarem'
 import SettingLogo from "./SettingLogo"
-import { useSelector } from "react-redux"
 import ControlAudio from "./ControlAudio"
-import { Translate } from '../redux/reducers/index'
+
 
 const Pages = () => {
+  //vars
 
   let { pageNumber } = useParams()
   let pageNum: number = Number(pageNumber)
@@ -22,8 +22,10 @@ const Pages = () => {
   const [aye, setAye] = useState<string>('')
   const [sureTemp1, setSureTemp] = useState<number>(0)
   const [ayeTemp1, setAyeTemp] = useState<number>(0)
-  const currentTranslate = useSelector((state: Translate) => state.translate)
-  const [currPlay, setCurrPlay] = useState<boolean>(false)
+  const currentTranslate = localStorage.getItem('translate')
+  const currentGhari = localStorage.getItem('ghari')
+
+  // const [currPlay, setCurrPlay] = useState<boolean>(false)
 
   useEffect(() => {
     pageContent(pageNum)
@@ -33,6 +35,7 @@ const Pages = () => {
     finishSut()
   }, [arr])
 
+  //functions
 
   const next = () => {
     navigate(`/page/${pageNum + 1}`)
@@ -118,16 +121,16 @@ const Pages = () => {
       }
     }
 
-    if (typeof item !== 'string') {
-      for (let c = 0; c < item.aye.length; c++) {
-        if (c === Number(index) - 1 && toggle) {
-          setCurrPlay(true)
-        }
-        else {
-          setCurrPlay(false)
-        }
-      }
-    }
+    // if (typeof item !== 'string') {
+    //   for (let c = 0; c < item.aye.length; c++) {
+    //     if (c === Number(index) - 1 && toggle) {
+    //       setCurrPlay(true)
+    //     }
+    //     else {
+    //       setCurrPlay(false)
+    //     }
+    //   }
+    // }
 
   }
   const handleNext = () => {
@@ -163,11 +166,10 @@ const Pages = () => {
       console.log(error);
     }
   }
-
-
+  console.log(currentGhari);
   return (
     <div className="page-content-wrapper">
-      <audio onEnded={handleNext} className="audio" controls autoPlay={toggle} muted={!toggle} src={`http://www.everyayah.com/data/Menshawi_32kbps/${sure}${aye}.mp3`}>
+      <audio onEnded={handleNext} className="audio" controls autoPlay={toggle} muted={!toggle} src={`http://www.everyayah.com/data/${currentGhari}/${sure}${aye}.mp3`}>
         play
       </audio>
       <SettingLogo />
@@ -220,7 +222,7 @@ const Pages = () => {
         <button className="back" onClick={backToMenu}>لیست سوره‌ها</button>
         {pageNum !== 1 && <button className="pre" onClick={previous}>صفحه قبلی</button>}
       </div>
-    </div>
+    </div >
   )
 }
 

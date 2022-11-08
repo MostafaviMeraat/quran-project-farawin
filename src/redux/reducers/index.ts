@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux'
-import { translateReducer } from './reducers'
+import { translateReducer, ghariReducer } from './reducers'
 
 const allReducers = combineReducers({
   translate: translateReducer,
+  ghari: ghariReducer,
 })
 
 export default allReducers
 
-export type Translate = ReturnType<typeof allReducers>
+export type AllReducers = ReturnType<typeof allReducers>

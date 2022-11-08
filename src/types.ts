@@ -27,6 +27,7 @@ export type MyObject = {
 
 export type Actions = {
   CHANGETRANSLATE: string
+  CHANGEGHARI: string
 }
 
 export type Action = {
