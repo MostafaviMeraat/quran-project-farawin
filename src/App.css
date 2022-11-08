@@ -1,3 +1,18 @@
+@font-face {
+  font-family: "font1";
+  src: url("./quran-resources (farawin)/font/me-quran.woff") format('woff');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "font2";
+  src: url("./quran-resources (farawin)/font/me-quran.eot") format('eot');
+}
+
+.App {
+  font-family: 'font1';
+}
+
 .sure {
   border-bottom: 2px solid black;
   margin: 2px;
@@ -6,8 +21,8 @@
 }
 
 .sure:hover {
-  background-color: rgba(65, 105, 225, 0.692);
-  transition: all 500ms ease-in-out
+  background-color: darkgray;
+  transition: all 200ms ease-in-out
 }
 
 .search-area {
@@ -20,20 +35,126 @@
   min-width: 300px;
   padding: .5em;
   border-radius: 5px;
+  font-family: sans-serif;
+}
+
+.search-box:focus {
+  background-color: rgba(65, 65, 65, 0.212);
 }
 
 .sura-head {
   display: grid;
   place-items: center;
+  padding-top: 50px;
 
 }
 
 .translate {
-  font-size: 19px;
+  font-size: 20px;
   margin: 12px;
+  font-family: sans-serif
 }
 
 .aye {
-  font-size: 24px;
+  font-size: 28px;
   margin: 12px;
+  margin-left: 75px;
+  font-family: 'font1';
+}
+
+.besmellah {
+  font-size: 32px;
+  font-family: 'font1';
+}
+
+.aye:hover {
+  cursor: pointer;
+}
+
+.setting-logo {
+  transform: scale(.7);
+  position: fixed;
+  left: 10px;
+  top: 10px;
+}
+
+.audio {
+  display: none;
+}
+
+.control-audio {
+  position: fixed;
+  display: grid;
+  place-items: center;
+  bottom: 6vh;
+  min-width: 100vw;
+}
+
+.aye-logo {
+  position: absolute;
+  left: 10px;
+}
+
+.stop {
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+.stop:hover {
+  transition: all 200ms ease-in-out;
+  scale: 1.2;
+  color: darkblue;
+}
+
+
+.colorize {
+  color: red;
+}
+
+.navigate {
+  position: fixed;
+  bottom: 1vh;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  min-width: 100vw;
+}
+
+.wrapper {
+  margin-top: -10px;
+  padding: 1em;
+}
+
+button {
+  background: rgba(0, 0, 0, .5);
+  outline: none;
+  padding: .2em;
+  font-size: 20px;
+  color: white;
+  font-family: sans-serif;
+  border: none;
+}
+
+button:hover {
+  transition: all 200ms ease-in-out;
+  transform: scale(1.2);
+  background-color: rgb(85, 85, 85);
+  color: white;
+}
+
+.page-content-wrapper {
+  font-family: sans-serif 'font1';
+  background: url('./quran-resources\ \(farawin\)/Images/background.jpg');
+  background-size: contain;
+}
+
+.sure-head-detail {
+  font-family: 'font1';
+}
+
+@media all and (max-width:768px) {
+  button {
+    font-size: 16px;
+    padding: .1em;
+  }
 }

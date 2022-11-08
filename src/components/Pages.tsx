@@ -1,10 +1,15 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { pages, suras } from '../quran-resources (farawin)/quran-metadata'
 import { emla } from "../quran-resources (farawin)/quran-text-emla"
-import { Aye, ArrAye, AnyArr } from "../types"
+import { Aye, ArrAye, AnyArr, Last } from "../types"
 import SuraHead from "./SuraHead"
 import { ansarian } from "../quran-resources (farawin)/quran-translate.fa.ansarian"
+import { makarem } from '../quran-resources (farawin)/quran-translate.fa.makarem'
+import SettingLogo from "./SettingLogo"
+import { useSelector } from "react-redux"
+import ControlAudio from "./ControlAudio"
+import { Translate } from '../redux/reducers/index'
 
 const Pages = () => {
 
@@ -12,11 +17,21 @@ const Pages = () => {
   let pageNum: number = Number(pageNumber)
   const navigate = useNavigate()
   const [arr, setArr] = useState<AnyArr>([])
-
+  const [toggle, setToggle] = useState<boolean>(false)
+  const [sure, setSure] = useState<string>('')
+  const [aye, setAye] = useState<string>('')
+  const [sureTemp1, setSureTemp] = useState<number>(0)
+  const [ayeTemp1, setAyeTemp] = useState<number>(0)
+  const currentTranslate = useSelector((state: Translate) => state.translate)
+  const [currPlay, setCurrPlay] = useState<boolean>(false)
 
   useEffect(() => {
     pageContent(pageNum)
   }, [pageNum])
+
+  useEffect(() => {
+    finishSut()
+  }, [arr])
 
 
   const next = () => {
@@ -33,10 +48,12 @@ const Pages = () => {
     let currSura: number = 0
     let arrtemp: ArrAye = [{
       aye: [],
-      translate: [],
+      translateAnsarian: [],
+      translateMakarem: [],
       ayeNumber: [],
       sure: '',
-      type: ''
+      type: '',
+      suraNumber: 0
     }]
     let start = Number(suras[pages[pageNum][0] - 1][0]) + pages[pageNum][1] - 1
 
@@ -46,8 +63,10 @@ const Pages = () => {
         currSura = Number(findSuraByIndex(emla.indexOf(emla[c]) + 1))
         try {
           arrtemp[0].aye.push(emla[c])
-          arrtemp[0].translate.push(ansarian[c])
+          arrtemp[0].translateAnsarian.push(ansarian[c])
+          arrtemp[0].translateMakarem.push(makarem[c])
           arrtemp[0].sure = String(suras[currSura - 1][4])
+          arrtemp[0].suraNumber = currSura
           arrtemp[0].ayeNumber.push(emla.indexOf(emla[c]) - Number(suras[currSura - 1][0]) + 1)
           arrtemp[0].type = String(suras[currSura - 1][7])
         } catch (error) {
@@ -62,8 +81,10 @@ const Pages = () => {
         currSura = Number(findSuraByIndex(emla.indexOf(emla[c]) + 1))
         try {
           arrtemp[0].aye.push(emla[c])
-          arrtemp[0].translate.push(ansarian[c])
+          arrtemp[0].translateAnsarian.push(ansarian[c])
+          arrtemp[0].translateMakarem.push(makarem[c])
           arrtemp[0].sure = String(suras[currSura - 1][4])
+          arrtemp[0].suraNumber = currSura
           arrtemp[0].ayeNumber.push(emla.indexOf(emla[c]) - Number(suras[currSura - 1][0]) + 1)
           arrtemp[0].type = String(suras[currSura - 1][7])
         } catch (error) {
@@ -81,8 +102,76 @@ const Pages = () => {
       }
     }
   }
+  const handleSut = (item: Aye | string, index: number | string) => {
+
+    if (typeof item !== 'string' && typeof index !== 'string') {
+      let sure = String(item.suraNumber).padStart(3, '0')
+      let aye = String(index).padStart(3, '0')
+      setSure(sure)
+      setAye(aye)
+      setToggle(true)
+    } else {
+      if (typeof item === 'string' && typeof index === 'string') {
+        setSure(item)
+        setAye(index)
+        setToggle(true)
+      }
+    }
+
+    if (typeof item !== 'string') {
+      for (let c = 0; c < item.aye.length; c++) {
+        if (c === Number(index) - 1 && toggle) {
+          setCurrPlay(true)
+        }
+        else {
+          setCurrPlay(false)
+        }
+      }
+    }
+
+  }
+  const handleNext = () => {
+
+    let sureTemp: any = Number(sure)
+    let ayeTemp: any = Number(aye)
+    if (suras[sureTemp - 1][1] > ayeTemp) {
+      ayeTemp += 1
+    }
+    else {
+      sureTemp += 1
+      ayeTemp = 1
+    }
+
+    sureTemp = String(sureTemp).padStart(3, '0')
+    ayeTemp = String(ayeTemp).padStart(3, '0')
+
+    if (toggle && Number(sureTemp) <= sureTemp1 && Number(ayeTemp) <= ayeTemp1) {
+      handleSut(sureTemp, ayeTemp)
+    }
+    else {
+      setToggle(false)
+    }
+  }
+  const finishSut = () => {
+    try {
+      let ayeTemp0 = arr[0].ayeNumber[arr[0].ayeNumber.length - 1]
+      let sureTemp0 = arr[0].suraNumber
+      setAyeTemp(ayeTemp0)
+      setSureTemp(sureTemp0)
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+
   return (
-    <div>
+    <div className="page-content-wrapper">
+      <audio onEnded={handleNext} className="audio" controls autoPlay={toggle} muted={!toggle} src={`http://www.everyayah.com/data/Menshawi_32kbps/${sure}${aye}.mp3`}>
+        play
+      </audio>
+      <SettingLogo />
+      {toggle && <ControlAudio setToggle={setToggle} />}
       <div>
         {arr.length !== null && arr.map((item: Aye, index: number) => {
           return (
@@ -91,15 +180,33 @@ const Pages = () => {
                 return (<div key={idx}>
                   {item.ayeNumber[idx] === 1
                     ?
-                    <div>
+                    <div className="wrapper">
                       <SuraHead type={item.type} sure={item.sure} />
-                      <div className="aye">{i} {item.ayeNumber[idx]}</div><br />
-                      <div className="translate">{item.translate[idx]}</div><br /><br /><br />
+                      <div onClick={() => { handleSut(item, item.ayeNumber[idx]) }} className="aye">{i} <span className="aye-logo">﴿{item.ayeNumber[idx]}﴾</span></div><br />
+                      {currentTranslate === 'makarem'
+                        ?
+                        <div>
+                          <div className="translate">{item.translateMakarem[idx]}</div><br /><br /><br />
+                        </div>
+                        :
+                        <div>
+                          <div className="translate">{item.translateAnsarian[idx]}</div><br /><br /><br />
+                        </div>
+                      }
                     </div>
                     :
-                    <div>
-                      <div className="aye">{i} {item.ayeNumber[idx]}</div><br />
-                      <div className="translate">{item.translate[idx]}</div><br /><br /><br />
+                    <div className="wrapper">
+                      <div onClick={() => { handleSut(item, item.ayeNumber[idx]) }} className='aye'>{i} <span className="aye-logo">﴿{item.ayeNumber[idx]}﴾</span></div><br />
+                      {currentTranslate === 'makarem'
+                        ?
+                        <div>
+                          <div className="translate">{item.translateMakarem[idx]}</div><br /><br /><br />
+                        </div>
+                        :
+                        <div>
+                          <div className="translate">{item.translateAnsarian[idx]}</div><br /><br /><br />
+                        </div>
+                      }
                     </div>
                   }
                 </div>)
@@ -108,12 +215,11 @@ const Pages = () => {
           )
         })}
       </div>
-      <div>
-        {pageNum !== 604 && <button onClick={next}>Next</button>}
-        {pageNum !== 1 && < button onClick={previous}>Pre</button>}
-        <button onClick={backToMenu}>Back To Menu</button>
+      <div className="navigate">
+        {pageNum !== 604 && <button className="next" onClick={next}>صفحه بعدی</button>}
+        <button className="back" onClick={backToMenu}>لیست سوره‌ها</button>
+        {pageNum !== 1 && <button className="pre" onClick={previous}>صفحه قبلی</button>}
       </div>
-
     </div>
   )
 }

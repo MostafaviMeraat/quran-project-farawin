@@ -1,10 +1,7 @@
 import './App.css'
-import Pages from './components/Pages';
 import { pages, suras } from './quran-resources (farawin)/quran-metadata'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { emla } from './quran-resources (farawin)/quran-text-emla';
-
 
 function App() {
   //ts
@@ -56,6 +53,7 @@ function App() {
   }
   return (
     <div className="App">
+      {/* search box */}
       <div className='search-area'>
         <input
           className='search-box'
@@ -64,28 +62,21 @@ function App() {
           autoFocus
           onChange={(e) => { handleChange(e) }} />
       </div>
-
+      {/* suras */}
       <div>
         {match.length > 0
-          ?
+          &&
           match.map((item, index) => {
-            return (
-              <div onClick={() => { findSura(item) }} className='sure' key={index}>
-                <h2> نام سوره:{item[4]}</h2>
-                <h2>{item[6]}</h2>
-                <h2>تعداد آیات:{item[1]}</h2>
-                <h2>{item[7]}</h2>
-              </div>)
-          })
-          :
-          match.map((item, index) => {
-            return (
-              <div onClick={() => { findSura(item) }} className='sure' key={index}>
-                <h2> نام سوره:{item[4]}</h2>
-                <h2>{item[6]}</h2>
-                <h2>تعداد آیات:{item[1]}</h2>
-                <h2>{item[7]}</h2>
-              </div>)
+            {
+              return (
+                item[1] > 1 &&
+                <div onClick={() => { findSura(item) }} className='sure' key={index}>
+                  <h2> نام سوره:{item[4]}</h2>
+                  <h2>{item[6]}</h2>
+                  <h2>تعداد آیات:{item[1]}</h2>
+                  <h2>{item[7]}</h2>
+                </div>)
+            }
           })
         }
       </div>
